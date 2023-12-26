@@ -24,7 +24,7 @@ type Box = ();
 
 #[derive(Builder)]
 pub struct Command {
-    executable: String,
+  executable: String,
 }
 
 fn main() {}
