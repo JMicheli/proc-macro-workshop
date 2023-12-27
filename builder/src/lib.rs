@@ -17,7 +17,26 @@ pub fn derive(input: TokenStream) -> TokenStream {
       current_dir: Option<String>,
     }
 
+    use std::error::Error;
     impl #builder_struct_name {
+      pub fn build(&mut self) -> Result<#input_struct_name, Box<dyn Error>> {
+        if !(
+          self.executable.is_some() &&
+          self.args.is_some() &&
+          self.env.is_some() &&
+          self.current_dir.is_some()
+        ) {
+          return Err("Missing field".to_string().into());
+        }
+
+        Ok(#input_struct_name {
+          executable: self.executable.clone().unwrap(),
+          args: self.args.clone().unwrap(),
+          env: self.env.clone().unwrap(),
+          current_dir: self.current_dir.clone().unwrap(),
+        })
+      }
+
       fn executable(&mut self, executable: String) -> &mut Self {
         self.executable = Some(executable);
         self
